@@ -1,13 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class ToDo {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column('text')
-  title: string;
+  name: string;
 
-  @Column({ default: false })
-  isComplited: boolean;
+  @Column('text')
+  email: string;
+
+  @Column('text')
+  password: string;
 }
