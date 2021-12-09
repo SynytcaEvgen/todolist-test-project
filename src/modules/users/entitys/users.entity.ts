@@ -1,16 +1,48 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  OneToMany,
+} from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+
+import { ToDo } from '../../todo/entitys/todo.entity';
 
 @Entity()
 export class User {
+  @ApiProperty({ example: '1', description: 'Unique identifier' })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
+  @ApiProperty({
+    example: 'Name user',
+    description: 'User name',
+  })
+  @Column({ type: 'text', name: 'userName' })
   name: string;
 
-  @Column('text')
+  @ApiProperty({ example: 'examplemail@mail.com', description: 'User Email' })
+  @Column({ type: 'text' })
   email: string;
 
+  @ApiProperty({ example: '1234567890', description: 'User password' })
   @Column('text')
   password: string;
+
+  @ApiProperty({
+    example: 'date',
+    description: 'Data singin user',
+    required: false,
+  })
+  @CreateDateColumn({
+    type: 'timestamp',
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    nullable: true,
+  })
+  singin_date: Date;
+
+  @OneToMany(() => ToDo, (todo) => todo.user)
+  todo: ToDo[];
 }

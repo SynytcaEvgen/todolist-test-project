@@ -1,15 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'some to-do item', description: 'to-do item' })
   title: string;
-  @ApiProperty({ required: false })
-  isComplited?: boolean;
+  // @ApiProperty({ required: false })
+  // isComplited?: boolean;
 }
 
 export class UpdateDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'some to-do item',
+    description: 'to-do item',
+    required: false,
+  })
   title: string;
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    example: false,
+    description: 'true or false',
+    required: false,
+  })
   isComplited?: boolean;
 }

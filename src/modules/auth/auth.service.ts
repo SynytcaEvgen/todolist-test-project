@@ -1,0 +1,69 @@
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcryptjs from 'bcryptjs';
+
+import { CreateUserDto } from '../users/controller/user.dto';
+import { UsersService } from '../users/service/users.service';
+import { User } from '../users/entitys/users.entity';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService
+  ) {}
+
+  async login(userDto: CreateUserDto) {
+    const user = await this.validateUser(userDto);
+    return this.generateToken(user);
+  }
+
+  async registaration(user: User) {
+    const candidate = await this.userService.getUserByEmail(user.email);
+    if (candidate) {
+      throw new HttpException(
+        `Users with email ${user.email} exists`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    const hashPassword = await bcryptjs.hash(user.password, 5);
+    const userout = await this.userService.create({
+      ...user,
+      password: hashPassword,
+    });
+    return this.generateToken(userout);
+  }
+
+  private async generateToken(user: User) {
+    const payload = { email: user.email, id: user.id, name: user.name };
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
+
+  private async validateUser(userDto: CreateUserDto) {
+    const user = await this.userService.getUserByEmail(userDto.email);
+    if (user) {
+      const passwordEquals = await bcryptjs.compare(
+        userDto.password,
+        user.password
+      );
+      if (passwordEquals) {
+        return user;
+      } else {
+        throw new UnauthorizedException({
+          message: 'Uncooperative password',
+        });
+      }
+    } else {
+      throw new UnauthorizedException({
+        message: 'Uncooperative email',
+      });
+    }
+  }
+}

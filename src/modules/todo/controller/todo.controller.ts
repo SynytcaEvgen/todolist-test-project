@@ -11,9 +11,10 @@ import {
 import { ToDoService } from '../services/todo.service';
 import { ToDo } from '../entitys/todo.entity';
 import { CreateDto, UpdateDto } from './dto';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NotFoundResponse } from '../controller/type.response';
 
+@ApiTags('To-do list')
 @Controller('rest/doto')
 export class ToDoController {
   constructor(private readonly toDoService: ToDoService) {}
@@ -44,9 +45,9 @@ export class ToDoController {
   saveData(@Body() CreateDto: CreateDto): Promise<ToDo> {
     const todo = new ToDo();
     todo.title = CreateDto.title;
-    if (CreateDto.isComplited != undefined) {
-      todo.isComplited = CreateDto.isComplited;
-    }
+    // if (CreateDto.isComplited != undefined) {
+    //   todo.isComplited = CreateDto.isComplited;
+    // }
     return this.toDoService.create(todo);
   }
   @ApiOperation({ summary: 'Change by id some entry to to-do list' })
@@ -71,7 +72,7 @@ export class ToDoController {
     return this.toDoService.update(todo);
   }
   @ApiOperation({ summary: 'Delete by id some entry to to-do list' })
-  @ApiResponse({ status: 200, description: 'create to-do' })
+  @ApiResponse({ status: 200, description: 'delete to-do by id' })
   @ApiResponse({
     status: 404,
     description: 'Not found',
