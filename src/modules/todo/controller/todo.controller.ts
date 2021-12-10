@@ -40,7 +40,7 @@ export class ToDoController {
   @UseGuards(JwtAuthGaurd)
   @ApiBearerAuth()
   @Get()
-  async getData(@Request() req): Promise<ToDo[]> {
+  async getData(@Request() req: any): Promise<ToDo[]> {
     const userId = await this.decodeToken(req.headers.authorization);
     const todoArry = await this.toDoService.findByToken(userId);
     if (!todoArry.length) {
@@ -60,7 +60,10 @@ export class ToDoController {
   @UsePipes(ValidationPipe)
   @ApiBearerAuth()
   @Post()
-  async saveData(@Body() CreateDto: CreateDto, @Request() req): Promise<ToDo> {
+  async saveData(
+    @Body() CreateDto: CreateDto,
+    @Request() req: any
+  ): Promise<ToDo> {
     const todo = new ToDo();
     todo.title = CreateDto.title;
     todo.user = await this.decodeToken(req.headers.authorization);
@@ -81,7 +84,7 @@ export class ToDoController {
   async updateData(
     @Param('id') id: string,
     @Body() UpdateDto: UpdateDto,
-    @Request() req
+    @Request() req: any
   ): Promise<ToDo> {
     const userId = await this.decodeToken(req.headers.authorization);
     const todo = await this.toDoService.findOne(id, userId);
@@ -102,7 +105,10 @@ export class ToDoController {
   @UseGuards(JwtAuthGaurd)
   @ApiBearerAuth()
   @Delete(':id')
-  async deletData(@Param('id') id: string, @Request() req): Promise<object> {
+  async deletData(
+    @Param('id') id: string,
+    @Request() req: any
+  ): Promise<object> {
     const userId = await this.decodeToken(req.headers.authorization);
     const todoItem = await this.toDoService.findOne(id, userId);
     const mess = {
