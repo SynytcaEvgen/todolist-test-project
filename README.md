@@ -1,73 +1,131 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+Test poject To-do list 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Stack: REST API, NestJS, mysql, typeORM, jwt, typescript
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+Documentation start: 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+"HOSTING" - some hostion ( for example: localhost:3000 )
+"IDTODO" - id to-do (for example: 1)
 
-## Installation
+Swagger http://HOSTING/api/docs
 
-```bash
-$ npm install
-```
+1. User Registarition:
 
-## Running the app
+POST http://HOSTING/auth/registaration
 
-```bash
-# development
-$ npm run start
+Example request (JSON)
+{
+  "name": "Name user", // optional parameter
+  "email": "examplemail@mail.com",
+  "password": "1234567890",
+}
 
-# watch mode
-$ npm run start:dev
+Example response (JSON)
 
-# production mode
-$ npm run start:prod
-```
+{
+    "token": "XXXXXXXXXXXXXXXXXXX" // jwt token
+}
 
-## Test
+2. User authorization:
 
-```bash
-# unit tests
-$ npm run test
+POST http://HOSTING/auth/login
 
-# e2e tests
-$ npm run test:e2e
+Example request (JSON)
+{
+  "email": "examplemail@mail.com",
+  "password": "1234567890",
+}
 
-# test coverage
-$ npm run test:cov
-```
+Example response (JSON)
 
-## Support
+{
+    "token": "XXXXXXXXXXXXXXXXXXX" // jwt token
+}
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+3. Add item to to-do list:
 
-## Stay in touch
+POST http://HOSTING/rest/todo
+Headers 
+Authorization: token
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Example request (JSON)
+{
+  "title": "to-do",
+}
 
-## License
+Example response (JSON)
+{
+    "title": "to-do",
+    "user": 13,
+    "created_at": "2021-12-10T10:09:58.792Z",
+    "updated_at": "2021-12-10T10:09:58.792Z",
+    "id": 21,
+    "isComplited": false
+}
 
-Nest is [MIT licensed](LICENSE).
+4. Edit item/mark as done in todolist:
+
+PUT http://HOSTING/rest/todo/IDTODO
+Headers 
+Authorization: token
+
+Example request (JSON)
+{
+  "title": "to-do", //(only string) optional parameter if need change title
+  "isComplited": true //(only boolen) optional parameter if need mark as done
+}
+
+Example response (JSON)
+{
+    "id": IDTODO,
+    "isComplited": true,
+    "title": "to-do",
+    "created_at": "2021-12-10T09:20:19.315Z",
+    "updated_at": "2021-12-10T09:22:22.000Z"
+}
+
+5. Remove item from todolist:
+
+DELETE http://HOSTING/rest/todo/IDTODO
+Headers 
+Authorization: token
+
+
+Example response (JSON)
+{
+    "action": "Delete",
+    "status": "success",
+    "delete_obj_id": "18"
+}
+
+5. Remove item from todolist:
+
+GET http://localhost:3000/rest/todo
+Headers 
+Authorization: 
+
+Example response (JSON)
+[
+    {
+        "id": 19,
+        "title": "To-do list test - 3",
+        "isComplited": false,
+        "created_at": "2021-12-10T09:24:01.949Z",
+        "updated_at": "2021-12-10T09:24:01.949Z"
+    },
+    {
+        "id": 17,
+        "title": "To-do  list test - 1",
+        "isComplited": false,
+        "created_at": "2021-12-10T09:23:53.431Z",
+        "updated_at": "2021-12-10T09:23:53.431Z"
+    },
+    {
+        "id": 16,
+        "title": "To-do  change",
+        "isComplited": true,
+        "created_at": "2021-12-10T09:20:19.315Z",
+        "updated_at": "2021-12-10T09:22:22.000Z"
+    }
+]
