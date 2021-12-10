@@ -46,7 +46,7 @@ export class ToDoController {
     });
     return todoArry;
   }
-  @ApiOperation({ summary: 'Save some entry to to-do list' })
+  @ApiOperation({ summary: 'Save some entry to to-do list for user' })
   @ApiResponse({ status: 200, type: ToDo, description: 'create to-do' })
   @ApiBody({ type: CreateDto })
   @UseGuards(JwtAuthGaurd)
@@ -58,7 +58,7 @@ export class ToDoController {
     todo.user = await this.decodeToken(req.headers.authorization);
     return this.toDoService.create(todo);
   }
-  @ApiOperation({ summary: 'Change by id some entry to to-do list' })
+  @ApiOperation({ summary: 'Change by id some entry to to-do list for user' })
   @ApiBody({ type: UpdateDto })
   @ApiResponse({ status: 200, description: 'change to-do' })
   @ApiResponse({
@@ -83,7 +83,7 @@ export class ToDoController {
     todo.isComplited = UpdateDto.isComplited;
     return this.toDoService.update(todo);
   }
-  @ApiOperation({ summary: 'Delete by id some entry to to-do list' })
+  @ApiOperation({ summary: 'Delete by id some entry to to-do list for user' })
   @ApiResponse({ status: 200, description: 'delete to-do by id' })
   @ApiResponse({
     status: 404,

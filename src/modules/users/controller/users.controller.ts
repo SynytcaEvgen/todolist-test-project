@@ -1,14 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  NotFoundException,
-  UseGuards,
-  UsePipes,
-} from '@nestjs/common';
+import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGaurd } from '../../auth/jwt-auth.guard';
 import { ValidationPipe } from '../../pipe/validation.pipe';
 
 import { User } from '../entitys/users.entity';
@@ -20,18 +11,7 @@ import { CreateUserDto } from './user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, type: [User] })
-  @UseGuards(JwtAuthGaurd)
-  @Get()
-  async getUsers(): Promise<User[]> {
-    const users = await this.usersService.findAll();
-    if (users === undefined) {
-      throw new NotFoundException(`Users not found`);
-    }
-    return users;
-  }
-  @ApiOperation({ summary: 'Singin user' })
+  @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 200, type: User, description: 'singin user' })
   @ApiBody({ type: CreateUserDto })
   @UsePipes(ValidationPipe)
