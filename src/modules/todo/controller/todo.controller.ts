@@ -16,7 +16,13 @@ import { JwtService } from '@nestjs/jwt';
 import { ToDoService } from '../services/todo.service';
 import { ToDo } from '../entitys/todo.entity';
 import { CreateDto, UpdateDto } from './dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { NotFoundResponse } from '../controller/type.response';
 import { JwtAuthGaurd } from 'src/modules/auth/jwt-auth.guard';
 import { ValidationPipe } from 'src/modules/pipe/validation.pipe';
@@ -32,6 +38,7 @@ export class ToDoController {
   @ApiOperation({ summary: 'Get all entries from to-do list for user' })
   @ApiResponse({ status: 200, type: [ToDo] })
   @UseGuards(JwtAuthGaurd)
+  @ApiBearerAuth()
   @Get()
   async getData(@Request() req): Promise<ToDo[]> {
     const userId = await this.decodeToken(req.headers.authorization);
@@ -51,6 +58,7 @@ export class ToDoController {
   @ApiBody({ type: CreateDto })
   @UseGuards(JwtAuthGaurd)
   @UsePipes(ValidationPipe)
+  @ApiBearerAuth()
   @Post()
   async saveData(@Body() CreateDto: CreateDto, @Request() req): Promise<ToDo> {
     const todo = new ToDo();
@@ -67,6 +75,7 @@ export class ToDoController {
     type: NotFoundResponse,
   })
   @UseGuards(JwtAuthGaurd)
+  @ApiBearerAuth()
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updateData(
@@ -91,6 +100,7 @@ export class ToDoController {
     type: NotFoundResponse,
   })
   @UseGuards(JwtAuthGaurd)
+  @ApiBearerAuth()
   @Delete(':id')
   async deletData(@Param('id') id: string, @Request() req): Promise<object> {
     const userId = await this.decodeToken(req.headers.authorization);

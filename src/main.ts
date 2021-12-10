@@ -11,6 +11,7 @@ async function start() {
     .setDescription('REST API Documentation')
     .setVersion('1.0.0')
     .addTag('Synytsia Yevhen')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
