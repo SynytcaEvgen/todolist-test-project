@@ -10,12 +10,12 @@ export class ToDoService {
     private readonly toDoRepository: Repository<ToDo>
   ) {}
 
-  findAll(): Promise<ToDo[]> {
-    return this.toDoRepository.find();
+  findByToken(tokenId: number): Promise<ToDo[]> {
+    return this.toDoRepository.find({ where: { user: tokenId } });
   }
 
-  findOne(id: string): Promise<ToDo> {
-    return this.toDoRepository.findOne(id);
+  findOne(id: string, tokenId: number): Promise<ToDo> {
+    return this.toDoRepository.findOne(id, { where: { user: tokenId } });
   }
 
   create(toDo: ToDo): Promise<ToDo> {

@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsBoolean, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateDto {
   @ApiProperty({ example: 'some to-do item', description: 'to-do item' })
+  @IsString({ message: 'Should be string' })
+  @IsNotEmpty({ message: 'Field title should be has some message' })
   title: string;
-  // @ApiProperty({ required: false })
-  // isComplited?: boolean;
 }
 
 export class UpdateDto {
@@ -13,11 +14,16 @@ export class UpdateDto {
     description: 'to-do item',
     required: false,
   })
-  title: string;
+  @IsString({ message: 'Should be string' })
+  @IsOptional()
+  title?: string;
+
   @ApiProperty({
     example: false,
     description: 'true or false',
     required: false,
   })
+  @IsBoolean({ message: 'Should be true or false' })
+  @IsOptional()
   isComplited?: boolean;
 }

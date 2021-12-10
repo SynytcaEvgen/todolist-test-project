@@ -2,17 +2,14 @@ import {
   Controller,
   Get,
   Post,
-  // Put,
-  // Delete,
-  // Param,
   Body,
   NotFoundException,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGaurd } from 'src/modules/auth/jwt-auth.guard';
-import { ValidationPipe } from 'src/modules/pipe/validation.pipe';
+import { JwtAuthGaurd } from '../../auth/jwt-auth.guard';
+import { ValidationPipe } from '../../pipe/validation.pipe';
 
 import { User } from '../entitys/users.entity';
 import { UsersService } from '../service/users.service';

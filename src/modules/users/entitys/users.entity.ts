@@ -9,7 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { ToDo } from '../../todo/entitys/todo.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @ApiProperty({ example: '1', description: 'Unique identifier' })
   @PrimaryGeneratedColumn()

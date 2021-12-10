@@ -23,17 +23,17 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async registaration(user: User) {
-    const candidate = await this.userService.getUserByEmail(user.email);
+  async registaration(userDto: CreateUserDto) {
+    const candidate = await this.userService.getUserByEmail(userDto.email);
     if (candidate) {
       throw new HttpException(
-        `Users with email ${user.email} exists`,
+        `Users with email ${userDto.email} exists`,
         HttpStatus.BAD_REQUEST
       );
     }
-    const hashPassword = await bcryptjs.hash(user.password, 5);
+    const hashPassword = await bcryptjs.hash(userDto.password, 5);
     const userout = await this.userService.create({
-      ...user,
+      ...userDto,
       password: hashPassword,
     });
     return this.generateToken(userout);
